@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ג'קי פרו — שאלון כיוון אמנותי</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Heebo:wght@300;400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Josefin+Sans:wght@300;400;600&family=Anton&family=Caveat:wght@500;700&family=Archivo:wght@400;700&family=Bodoni+Moda:ital,wght@0,500;1,500&display=swap');
+:root{--bone:#EDE6D6;--paper:#F4EFE4;--ink:#16140F;--grey:#7a7468;--hair:#cdc5b5;--gold:#AB8747;--black:#0c0b0a;
+  --serif:'Frank Ruhl Libre','Cormorant Garamond',Georgia,serif;--sans:'Heebo','Helvetica Neue',Arial,sans-serif;}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{background:var(--bone);color:var(--ink);font-family:var(--serif);display:flex;align-items:center;justify-content:center;min-height:100vh;overflow:hidden}
+.wrap{width:min(1040px,96vw);height:min(95vh,880px);position:relative;display:flex;flex-direction:column}
+.bar{display:flex;gap:5px;padding:4px 2px 8px;flex:0 0 auto}
+.bar i{flex:1;height:3px;background:var(--hair);border-radius:2px;transition:.4s}
+.bar i.on{background:var(--gold)}
+.brand{position:absolute;top:14px;left:12px;z-index:7;pointer-events:none}
+.brand img{height:13px;width:auto;display:block;filter:brightness(0);opacity:.32}
+.stage{flex:1;display:flex;flex-direction:column;min-height:0;opacity:1;transition:opacity .26s,transform .26s}
+.stage.out{opacity:0;transform:translateX(22px)}.stage.in{opacity:0;transform:translateX(-22px)}
+.head{flex:0 0 auto;text-align:center}
+.kick{font-family:var(--sans);font-size:12px;letter-spacing:.1em;color:var(--grey);margin:2px 0}
+.q{font-size:clamp(25px,3.8vw,40px);line-height:1.05;margin:0;font-weight:500}
+.sub{color:var(--grey);font-size:clamp(14px,1.7vw,18px);margin:3px 0 10px}
+.opts{flex:1;min-height:0;overflow-y:auto;display:grid;gap:clamp(8px,1.2vw,15px);align-content:start;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));padding:2px}
+.opts.few{grid-template-columns:repeat(auto-fit,minmax(175px,1fr))}
+.opt{position:relative;display:flex;flex-direction:column;cursor:pointer;border:1px solid var(--hair);background:var(--paper);border-radius:4px;overflow:hidden;min-height:175px;transition:transform .16s,box-shadow .22s,border-color .2s}
+.opt:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(0,0,0,.15);border-color:var(--gold)}
+.opt .vis{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.opt .vis img{width:100%;height:100%;object-fit:cover;display:block}
+.opt .vis svg{width:100%;height:100%;display:block}
+.opt .cap{padding:7px 6px 9px;text-align:center;border-top:1px solid var(--hair)}
+.opt .cap b{display:block;font-family:var(--sans);font-size:14px;font-weight:500}
+.opt .cap span{display:block;color:var(--grey);font-size:13px}
+.opt .pick{position:absolute;top:7px;left:7px;width:26px;height:26px;border-radius:50%;background:var(--gold);color:#fff;display:none;align-items:center;justify-content:center;font-family:var(--sans);font-size:14px;z-index:2}
+.opt.sel{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold) inset}.opt.sel .pick{display:flex}
+.prompt{flex:0 0 auto;margin-top:8px}
+.prompt input{width:100%;font-family:var(--serif);font-size:16px;color:var(--ink);background:var(--paper);border:1px solid var(--hair);border-radius:3px;padding:9px 12px;text-align:right}
+.prompt input::placeholder{color:var(--gold);font-style:italic;opacity:.85}
+.prompt input:focus{outline:none;border-color:var(--gold)}
+.nav{flex:0 0 auto;display:flex;justify-content:space-between;align-items:center;padding-top:8px;font-family:var(--sans);font-size:13px;color:var(--grey)}
+.nav button{font:inherit;background:none;border:none;color:var(--grey);cursor:pointer;padding:8px 6px}
+.nav button:disabled{opacity:.3;cursor:default}
+#cont{background:var(--ink);color:var(--bone);border-radius:2px;padding:10px 24px;font-weight:500;font-size:14px}
+.intro{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px}
+.intro .big{font-size:clamp(32px,5.6vw,60px);font-weight:500;line-height:1.05;margin:0}
+.intro .lead{color:var(--grey);font-size:clamp(16px,2.2vw,22px);max-width:600px;margin:10px 0 0}
+.intro .gold{color:var(--gold)}
+.intro .plug{margin-top:26px;text-align:center}
+.intro .plug .by{font-family:var(--sans);font-size:11px;letter-spacing:.24em;color:var(--grey);margin-bottom:8px}
+.intro .plug img{height:26px;width:auto;filter:brightness(0);opacity:.72}
+.result{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;overflow:auto;padding-top:6px}
+.result.show{display:flex}
+.result .tag{font-family:var(--sans);font-size:12px;letter-spacing:.16em;color:var(--gold);margin-bottom:8px}
+.result h1{font-weight:500;font-size:clamp(30px,5vw,50px);margin:4px 0 10px;text-align:center}
+.spec{width:100%;max-width:720px}
+.row{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--hair);padding:8px 4px;gap:14px}
+.row .k{font-family:var(--sans);font-size:13px;color:var(--grey);flex:0 0 auto}
+.row .v{font-size:19px;font-weight:500;text-align:left}
+.row .nt{display:block;font-size:15px;color:var(--gold)}
+.actions{display:flex;gap:12px;margin:16px 0 4px;flex-wrap:wrap;justify-content:center}
+.actions button,.actions a{font-family:var(--sans);font-size:14px;padding:11px 22px;border:1px solid var(--ink);background:none;color:var(--ink);cursor:pointer;border-radius:2px;text-decoration:none}
+.actions .g{background:var(--ink);color:var(--bone)}
+.note{color:var(--grey);font-size:15px;text-align:center;margin-top:4px;max-width:600px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="bar" id="bar"></div>
+  <div class="brand"><img src="assets/wildmind-frame14.png" alt="WILDMIND"></div>
+  <div class="stage" id="stage"></div>
+  <div class="result" id="result"></div>
+  <div class="nav" id="nav">
+    <button id="back">אחורה ›</button>
+    <span id="count"></span>
+    <button id="cont">המשך ‹</button>
+  </div>
+</div>
+<script>
+const A='assets/', MAIL='rosenthal.dor@gmail.com';
+const fr=(inner)=>`<svg viewBox="0 0 200 200" preserveAspectRatio="xMidYMid slice"><rect width="200" height="200" fill="#F4EFE4"/>${inner}</svg>`;
+const rg=(cx,cy,r,c='#AB8747')=>`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${c}" stroke-width="${Math.max(3,r/7)}"/>`;
+const sw=(c)=>`<svg viewBox="0 0 200 200"><rect width="200" height="200" fill="${c}"/></svg>`;
+const spec=(f,t,it)=>fr(`<text x="100" y="118" fill="#16140f" font-family="${f}" font-size="64"${it?' font-style="italic"':''} text-anchor="middle">${t}</text>`);
+const word=(f,t,s,ls)=>fr(`<text x="100" y="${s>50?118:112}" fill="#16140f" font-family="${f}" font-size="${s}" letter-spacing="${ls||0}" text-anchor="middle">${t}</text>`);
+const term=(t)=>`<svg viewBox="0 0 200 200"><rect width="200" height="200" fill="#F4EFE4"/><text x="100" y="112" fill="#16140f" font-family="Frank Ruhl Libre,serif" font-size="24" font-weight="500" text-anchor="middle">${t}</text></svg>`;
+// rich type specimen: lines = [text, size, letterSpacing, y, italic]
+const fc=(f,lines)=>`<svg viewBox="0 0 200 200"><rect width="200" height="200" fill="#F4EFE4"/>${lines.map(l=>`<text x="100" y="${l[3]}" fill="#16140f" font-family="${f}" font-size="${l[1]}" letter-spacing="${l[2]||0}"${l[4]?' font-style="italic"':''} text-anchor="middle">${l[0]}</text>`).join('')}</svg>`;
+const img=(f)=>`<img src="${A}${f}">`;
+
+const CARDS=[
+ {intro:true},
+ {key:'כמות',kick:'01 · כמה תכשיטים',q:'כמה תכשיטים בתמונה?',sub:'כמה שבא לך',
+  o:[{b:'אחד',v:fr(rg(100,100,52))},{b:'שניים',v:fr(rg(72,100,34)+rg(128,100,34))},
+     {b:'שלושה',v:fr(rg(64,100,26)+rg(100,100,26)+rg(136,100,26))},
+     {b:'הרבה',v:fr(rg(55,60,15)+rg(100,55,15)+rg(145,68,15)+rg(70,120,15)+rg(120,135,15)+rg(150,115,15))}]},
+ {key:'סידור',kick:'02 · סידור',q:'איך מסדרים?',sub:'איפה הם בתמונה',
+  o:[{b:'ממורכז',v:fr(rg(100,100,30))},{b:'מוסט',v:fr(rg(66,140,26))},{b:'שליש',v:fr(rg(140,68,26))},
+     {b:'פינתי',v:fr(rg(165,165,22))},{b:'שורה',v:fr(rg(52,100,17)+rg(100,100,17)+rg(148,100,17))},
+     {b:'עמודה',v:fr(rg(100,52,17)+rg(100,100,17)+rg(100,148,17))},
+     {b:'שתי שורות',v:fr(rg(60,72,14)+rg(100,72,14)+rg(140,72,14)+rg(60,128,14)+rg(100,128,14)+rg(140,128,14))},
+     {b:'שתי עמודות',v:fr(rg(72,60,14)+rg(72,100,14)+rg(72,140,14)+rg(128,60,14)+rg(128,100,14)+rg(128,140,14))},
+     {b:'רשת',v:fr(rg(72,72,16)+rg(128,72,16)+rg(72,128,16)+rg(128,128,16))},
+     {b:'רשת גדולה',v:fr(rg(58,58,11)+rg(100,58,11)+rg(142,58,11)+rg(58,100,11)+rg(100,100,11)+rg(142,100,11)+rg(58,142,11)+rg(100,142,11)+rg(142,142,11))},
+     {b:'אלכסון',v:fr(rg(58,58,15)+rg(100,100,15)+rg(142,142,15))},
+     {b:'מפוזר',v:fr(rg(58,64,13)+rg(132,58,13)+rg(150,120,13)+rg(70,140,13)+rg(105,105,13))}]},
+ {key:'צבעים',kick:'03 · צבעים',q:'הצבעים.',sub:'סמני כל מה שתופס לך את העין',
+  o:[{b:'בז׳',v:sw('#cfc6bc')},{b:'קרם',v:sw('#e0d9d2')},{b:'גריאז׳',v:sw('#d5d3c9')},
+     {b:'אפור בהיר',v:sw('#f1f0ec')},{b:'שחור',v:sw('#0c0b0a')},{b:'שחור חם',v:sw('#281513')},
+     {b:'כרום',v:sw('#a0a29e')},{b:'זהב',v:sw('#AB8747')},{b:'כסף',v:sw('#c2c5c9')}]},
+ {key:'עולם',kick:'04 · עולמות',q:'העולמות.',sub:'סמני כל עולם שאת אוהבת',
+  o:[{b:'על האוזן',v:img('world-onear.jpg')},{b:'על הגוף',v:img('world-onbody.jpg')},
+     {b:'חלל נקי',v:img('world-void.jpg')},{b:'גלריה',v:img('world-plinth.jpg')},
+     {b:'שולחן מלמעלה',v:img('world-tableflat.jpg')},{b:'טבעי',v:img('world-stone.jpg')},
+     {b:'סאטן',v:img('world-satin.jpg')},{b:'במים',v:img('world-glass.jpg')},
+     {b:'סוריאליסטי',s:'כף · פה · חיה · מרחף',v:img('world-animal.jpg')},
+     {b:'בטבע',v:img('world-nature.jpg')},{b:'כרום',v:img('world-chrome.jpg')},{b:'שיש',v:img('world-marble.jpg')},
+     {b:'מאקרו',v:img('world-macro.jpg')},{b:'רקע צבעוני',v:img('world-color.jpg')},{b:'ביד',v:img('world-inhand.jpg')}]},
+ {key:'אור',kick:'05 · אור',q:'האור.',sub:'איזה אור עושה לך את זה',
+  o:[{b:'רך וחם',v:img('world-satin.jpg')},{b:'שחור-לבן',v:img('world-stone.jpg')},
+     {b:'אור יום',v:img('world-glass.jpg')},{b:'צל קשה',v:img('world-void.jpg')},
+     {b:'נגד-אור',v:img('light-backlit.jpg')},{b:'שעת זהב',v:img('light-golden.jpg')}]},
+ {key:'פונט',kick:'06 · פונט',q:'הפונט.',sub:'אחד או שניים',
+  o:[{b:'גאומטרי דק',s:'הלוגו שלך',v:fc('Josefin Sans,sans-serif',[['JAKI',38,6,68],['Our New Collection',15,1,104],['Aa Bb 123',15,0,146]])},
+     {b:'צר וכבד',s:'כותרות',v:fc('Anton,sans-serif',[['JAKI',44,0,70],['OUR NEW COLLECTION',13,0,106],['Aa 123',17,0,148]])},
+     {b:'כתב יד',s:'אישי, רך',v:fc('Caveat,cursive',[['Our New',40,0,82],['Collection',38,0,124],['from sketch to reality',16,0,160]])},
+     {b:'סריף אלגנטי',s:'יוקרה שקטה',v:fc('Playfair Display,serif',[['Aa',44,0,66,1],['Our New Collection',16,0,102,1],['quiet luxury',14,0,140,1]])},
+     {b:'סריף קלאסי',s:'ספרותי',v:fc('Cormorant Garamond,serif',[['Aa',48,0,68,1],['Our New Collection',18,0,104],['AaBbCc 123',14,0,142]])},
+     {b:'גרוטסק נקי',s:'מודרני',v:fc('Archivo,sans-serif',[['JAKI',34,2,70],['Our New Collection',14,0,104],['Aa Bb 123',15,0,144]])},
+     {b:'סריף אופנה',s:'חד, יוקרתי',v:fc('Bodoni Moda,serif',[['Aa',44,0,66,1],['Our New Collection',15,0,102,1],['vogue · Aa',15,0,140,1]])}]},
+ {key:'מילים',kick:'07 · מילים',q:'טקסט על התמונה?',sub:'איפה יושבות המילים',
+  o:[{b:'על התמונה',v:fr(`<rect x="22" y="30" width="156" height="140" fill="#16140f"/><text x="100" y="108" fill="#EDE6D6" font-family="Cormorant Garamond,serif" font-style="italic" font-size="22" text-anchor="middle">quiet luxury</text>`)},
+     {b:'כיתוב לצד',v:fr(`<rect x="22" y="20" width="156" height="110" fill="#16140f"/><text x="100" y="170" fill="#7a7468" font-family="Cormorant Garamond,serif" font-style="italic" font-size="16" text-anchor="middle">quiet luxury</text>`)},
+     {b:'בלי',v:fr(`<rect x="22" y="30" width="156" height="140" fill="#16140f"/>`)}]},
+];
+
+let i=0; const ans={}, notes={};
+const bar=document.getElementById('bar'),stage=document.getElementById('stage'),result=document.getElementById('result'),
+      nav=document.getElementById('nav'),back=document.getElementById('back'),cont=document.getElementById('cont'),count=document.getElementById('count');
+CARDS.forEach(()=>{const e=document.createElement('i');bar.appendChild(e)});
+const has=(k,b)=>(ans[k]||[]).includes(b);
+
+function draw(){
+  const c=CARDS[i];
+  [...bar.children].forEach((e,n)=>e.classList.toggle('on',n<=i));
+  count.textContent=(i+1)+' / '+CARDS.length;
+  back.disabled=i===0;
+  cont.textContent = i===0 ? 'יאללה ‹' : (i===CARDS.length-1 ? 'סיימנו ‹' : 'הלאה ‹');
+  if(c.intro){
+    stage.innerHTML=`<div class="intro"><div class="kick">ג'קי פרו · כיוון אמנותי</div>
+      <p class="big">נסגור כיוון<br>אמנותי <span class="gold">מדהים</span></p>
+      <p class="lead">תבחרי לפי העין, לא לפי טקסט. סמני כל מה שמדבר אלייך, בלי הגבלה. בסוף נשאר כיוון אחד, וזהו.</p>
+      <div class="plug"><div class="by">מבית</div><img src="assets/wildmind-frame14.png" alt="WILDMIND"></div></div>`;
+    return;
+  }
+  stage.innerHTML=`<div class="head"><div class="kick">${c.kick}</div><div class="q">${c.q}</div><div class="sub">${c.sub}</div></div>
+   <div class="opts${c.o.length<=4?' few':''}">${c.o.map((o,n)=>`<div class="opt${has(c.key,o.b)?' sel':''}" data-n="${n}">
+     <div class="pick">✓</div><div class="vis">${o.v}</div><div class="cap"><b>${o.b}</b>${o.s?`<span>${o.s}</span>`:''}</div></div>`).join('')}</div>
+   <div class="prompt"><input id="note" placeholder="ספרי לי עוד..." value="${(notes[c.key]||'').replace(/"/g,'&quot;')}"></div>`;
+  stage.querySelectorAll('.opt').forEach(el=>el.onclick=()=>{
+    const b=c.o[+el.dataset.n].b, arr=ans[c.key]||(ans[c.key]=[]), k=arr.indexOf(b);
+    if(k>=0)arr.splice(k,1); else arr.push(b); el.classList.toggle('sel');
+  });
+  const ni=document.getElementById('note'); if(ni)ni.oninput=e=>notes[c.key]=e.target.value;
+}
+function advance(){
+  stage.classList.add('out');
+  setTimeout(()=>{ if(i<CARDS.length-1){i++;stage.classList.remove('out');stage.classList.add('in');draw();
+    requestAnimationFrame(()=>stage.classList.remove('in'));} else finish(); },190);
+}
+back.onclick=()=>{ if(i>0){i--;draw();} };
+cont.onclick=()=>advance();
+
+function val(c){const a=ans[c.key]; return (a&&a.length)?a.join(' · '):'—';}
+function finish(){
+  stage.style.display='none'; nav.style.display='none'; result.classList.add('show');
+  [...bar.children].forEach(e=>e.classList.add('on'));
+  const cards=CARDS.filter(c=>!c.intro);
+  const rows=cards.map(c=>`<div class="row"><span class="k">${c.key}</span><span class="v">${val(c)}${notes[c.key]?`<span class="nt">“${notes[c.key]}”</span>`:''}</span></div>`).join('');
+  const body=cards.map(c=>c.key+': '+val(c)+(notes[c.key]?'  ['+notes[c.key]+']':'')).join('\n');
+  const mailto='mailto:'+MAIL+'?subject='+encodeURIComponent('כיוון אמנותי ג\'קי פרו — אורל')+'&body='+encodeURIComponent('הכיוון של אורל:\n\n'+body);
+  result.innerHTML=`<div class="tag">נעול</div><h1>הכיוון של ג'קי</h1>
+    <div class="spec">${rows}</div>
+    <div class="actions">
+      <a class="g" href="${mailto}">שלחי לדור ‹</a>
+      <button id="copy">העתיקי</button>
+      <button id="again">מהתחלה</button>
+    </div>
+    <div class="note">״שלחי לדור״ פותח לך מייל מוכן. או צילום מסך. זה הכיוון, מפה מתחילים ליצור.</div>`;
+  document.getElementById('again').onclick=()=>{i=0;for(const k in ans)delete ans[k];for(const k in notes)delete notes[k];
+    result.classList.remove('show');stage.style.display='';nav.style.display='';draw();};
+  document.getElementById('copy').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(body);
+    document.getElementById('copy').textContent='הועתק ✓';};
+}
+draw();
+</script>
+</body>
+</html>
