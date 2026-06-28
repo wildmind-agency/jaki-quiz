@@ -15,8 +15,10 @@ body{background:var(--bone);color:var(--ink);font-family:var(--serif);display:fl
 .bar{display:flex;gap:5px;padding:4px 2px 8px;flex:0 0 auto}
 .bar i{flex:1;height:3px;background:var(--hair);border-radius:2px;transition:.4s}
 .bar i.on{background:var(--gold)}
-.brand{position:absolute;top:14px;left:12px;z-index:7;pointer-events:none}
-.brand img{height:13px;width:auto;display:block;filter:brightness(0);opacity:.32}
+.cwm,.cjaki{position:absolute;top:13px;z-index:7;pointer-events:none;display:none}
+.cwm{left:12px}.cjaki{right:12px}
+.cwm img{height:22px;width:auto;display:block;filter:brightness(0);opacity:.3}
+.cjaki img{height:15px;width:auto;display:block;filter:brightness(0);opacity:.46}
 .stage{flex:1;display:flex;flex-direction:column;min-height:0;opacity:1;transition:opacity .26s,transform .26s}
 .stage.out{opacity:0;transform:translateX(22px)}.stage.in{opacity:0;transform:translateX(-22px)}
 .head{flex:0 0 auto;text-align:center}
@@ -47,6 +49,7 @@ body{background:var(--bone);color:var(--ink);font-family:var(--serif);display:fl
 .intro .big{font-size:clamp(32px,5.6vw,60px);font-weight:500;line-height:1.05;margin:0}
 .intro .lead{color:var(--grey);font-size:clamp(16px,2.2vw,22px);max-width:600px;margin:10px 0 0}
 .intro .gold{color:var(--gold)}
+.intro .jakilogo img{height:46px;width:auto;filter:brightness(0);opacity:.9;margin-bottom:4px}
 .intro .plug{margin-top:26px;text-align:center}
 .intro .plug .by{font-family:var(--sans);font-size:11px;letter-spacing:.24em;color:var(--grey);margin-bottom:8px}
 .intro .plug img{height:26px;width:auto;filter:brightness(0);opacity:.72}
@@ -68,7 +71,8 @@ body{background:var(--bone);color:var(--ink);font-family:var(--serif);display:fl
 <body>
 <div class="wrap">
   <div class="bar" id="bar"></div>
-  <div class="brand"><img src="assets/wildmind-frame14.png" alt="WILDMIND"></div>
+  <div class="cwm" id="cwm"><img src="assets/wildmind-mark.png" alt="WILDMIND"></div>
+  <div class="cjaki" id="cjaki"><img src="assets/jaki-logo-white.png" alt="JAKI"></div>
   <div class="stage" id="stage"></div>
   <div class="result" id="result"></div>
   <div class="nav" id="nav">
@@ -137,20 +141,23 @@ const CARDS=[
 
 let i=0; const ans={}, notes={};
 const bar=document.getElementById('bar'),stage=document.getElementById('stage'),result=document.getElementById('result'),
-      nav=document.getElementById('nav'),back=document.getElementById('back'),cont=document.getElementById('cont'),count=document.getElementById('count');
+      nav=document.getElementById('nav'),back=document.getElementById('back'),cont=document.getElementById('cont'),count=document.getElementById('count'),
+      cwm=document.getElementById('cwm'),cjaki=document.getElementById('cjaki');
 CARDS.forEach(()=>{const e=document.createElement('i');bar.appendChild(e)});
 const has=(k,b)=>(ans[k]||[]).includes(b);
 
 function draw(){
   const c=CARDS[i];
+  cwm.style.display=c.intro?'none':'block'; cjaki.style.display=c.intro?'none':'block';
   [...bar.children].forEach((e,n)=>e.classList.toggle('on',n<=i));
   count.textContent=(i+1)+' / '+CARDS.length;
   back.disabled=i===0;
   cont.textContent = i===0 ? 'יאללה ‹' : (i===CARDS.length-1 ? 'סיימנו ‹' : 'הלאה ‹');
   if(c.intro){
-    stage.innerHTML=`<div class="intro"><div class="kick">ג'קי פרו · כיוון אמנותי</div>
+    stage.innerHTML=`<div class="intro"><div class="jakilogo"><img src="assets/jaki-logo-white.png" alt="JAKI"></div>
+      <div class="kick">כיוון אמנותי</div>
       <p class="big">נסגור כיוון<br>אמנותי <span class="gold">מדהים</span></p>
-      <p class="lead">תבחרי לפי העין, לא לפי טקסט. סמני כל מה שמדבר אלייך, בלי הגבלה. בסוף נשאר כיוון אחד, וזהו.</p>
+      <p class="lead">בואי נהדק את הכיוון העיצובי - ביחד. סמני כל מה שמדבר אלייך, אם יש עוד משהו שחשוב לך שאדע - ספרי לי!</p>
       <div class="plug"><div class="by">מבית</div><img src="assets/wildmind-frame14.png" alt="WILDMIND"></div></div>`;
     return;
   }
@@ -175,6 +182,7 @@ cont.onclick=()=>advance();
 function val(c){const a=ans[c.key]; return (a&&a.length)?a.join(' · '):'—';}
 function finish(){
   stage.style.display='none'; nav.style.display='none'; result.classList.add('show');
+  cwm.style.display='block'; cjaki.style.display='block';
   [...bar.children].forEach(e=>e.classList.add('on'));
   const cards=CARDS.filter(c=>!c.intro);
   const rows=cards.map(c=>`<div class="row"><span class="k">${c.key}</span><span class="v">${val(c)}${notes[c.key]?`<span class="nt">“${notes[c.key]}”</span>`:''}</span></div>`).join('');
